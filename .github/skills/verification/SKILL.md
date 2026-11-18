@@ -5,6 +5,8 @@ description: Select and run repository-appropriate build, test, acceptance, and 
 
 # Verification
 
+Before writing workflow verification evidence, derive the validated Jira issue ID from the active run and use only `output/<JIRA-ID>/docs/`. Never write verification results to a shared root-level `docs/` folder or another issue's output directory. Final-output checks must inspect that same issue folder.
+
 1. Inspect project manifests and repository instructions to identify supported build/test commands; do not assume a toolchain.
 2. Run relevant build, unit, integration, regression, error-case, and acceptance-criteria checks. Record exact commands, exit results, and available counts.
 3. Map each requirement and acceptance criterion to implementation evidence, a test/check, and a result. Mark checks that cannot be run and explain why.

@@ -10,10 +10,10 @@ argument-hint: Approved implementation-plan task IDs
 Implement only the approved, assigned implementation-plan tasks, including appropriate automated tests, while preserving the approved requirements and architecture.
 
 ## Inputs
-- `docs/requirements.md`
-- `docs/architecture.md`
-- `docs/design-review.md` with no unresolved `BLOCKER` or `HIGH` findings
-- `docs/impl-plan.md`
+- `output/<JIRA-ID>/docs/requirements.md`
+- `output/<JIRA-ID>/docs/architecture.md`
+- `output/<JIRA-ID>/docs/design-review.md` with no unresolved `BLOCKER` or `HIGH` findings
+- `output/<JIRA-ID>/docs/impl-plan.md`
 - Explicitly assigned, unblocked `IMP-###` task IDs
 - Repository conventions and existing test/build commands
 
@@ -36,7 +36,7 @@ Use the `requirements-traceability` skill to map task changes and tests to appro
 - Focused application-code and test changes required by the assigned tasks.
 - A concise implementation summary for the Orchestrator, including task IDs, requirement IDs, changed files, test evidence, and blockers.
 
-All workflow documents produced by this pipeline belong under `docs/`; do not create additional planning or evidence documents outside that directory.
+All workflow documents produced by this pipeline belong under `output/<JIRA-ID>/docs/`; do not create additional planning or evidence documents at the repository root or another issue's output directory.
 
 ## Boundaries
 - Do not implement unassigned or blocked tasks.

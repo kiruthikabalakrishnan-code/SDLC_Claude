@@ -16,3 +16,6 @@
 - Never expose, hard-code, or commit credentials, tokens, passwords, or other secrets.
 - External operations may proceed when they are part of the requested Orchestrator workflow and the required authorization is already available. The Jira issue key/ID is authorization for the requested GitHub PR workflow; pause only when authentication, permission, or a decision outside that authorization is required.
 - Preserve evidence for material decisions and report blockers, failed operations, and unavailable tools explicitly.
+- Store every Jira workflow's artifacts in `output/<JIRA-ID>/docs/`, where `<JIRA-ID>` is the validated canonical Jira key (uppercase) or numeric issue ID. Never write Jira-specific artifacts to a shared root `docs/` directory or another issue's output folder.
+- Before starting a workflow, preserve project-wide documentation outside `output/`, validate the Jira ID as a safe path segment, and inspect whether `output/<JIRA-ID>/` already exists. Reuse an existing folder only for the same issue; do not delete or overwrite another issue's outputs. Ask before replacing ambiguous or existing same-issue artifacts.
+- Keep generic project guidance (for example `FRAMEWORK.md`) outside Jira-specific output directories.

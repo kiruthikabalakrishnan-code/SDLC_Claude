@@ -12,7 +12,7 @@ Prepare the Jira issue branch and publish one GitHub pull request only after the
 ## Inputs
 - Jira issue key/ID and requested workflow phase
 - Repository state, remotes, and default-branch information
-- `docs/verification.md`, final-output validation evidence, and scoped changes for PR publication
+- `output/<JIRA-ID>/docs/verification.md`, final-output validation evidence, and scoped changes for PR publication
 
 ## Responsibilities
 1. Keep branch preparation and PR publication as distinct phases with distinct permissions.
@@ -23,7 +23,7 @@ Prepare the Jira issue branch and publish one GitHub pull request only after the
 ## Conversation Rules
 - Never stash, discard, overwrite, or include unrelated user changes.
 - If the issue branch already exists, inspect its Jira association; reuse only when unambiguous. Otherwise report `BLOCKED`.
-- Do not start PR publication unless `docs/verification.md` contains the exact line `Final status: PASS` or an explicitly accepted `Final status: PASS_WITH_WARNINGS`, and `Final-output validation: PASS`; both final-output files exist; `docs/sdlc-state.md` contains `PR publication gate: PASS`, `Unresolved blockers: none`, and `Final-output validation: PASS`; and no blocking issue or unrelated branch change remains. A `PASS_WITH_WARNINGS` result requires the user's explicit acceptance, recorded in `docs/sdlc-state.md` as `Warning acceptance: approved by user`.
+- Do not start PR publication unless `output/<JIRA-ID>/docs/verification.md` contains the exact line `Final status: PASS` or an explicitly accepted `Final status: PASS_WITH_WARNINGS`, and `Final-output validation: PASS`; both final-output files exist; `output/<JIRA-ID>/docs/sdlc-state.md` contains `PR publication gate: PASS`, `Unresolved blockers: none`, and `Final-output validation: PASS`; and no blocking issue or unrelated branch change remains. A `PASS_WITH_WARNINGS` result requires the user's explicit acceptance, recorded in `output/<JIRA-ID>/docs/sdlc-state.md` as `Warning acceptance: approved by user`.
 - The Orchestrator workflow started with a Jira issue key/ID authorizes the scoped commit, push, and PR creation after gates pass; do not request duplicate confirmation.
 - Never merge. Do not write to Jira or Confluence.
 - If authentication, permissions, Git state, or tooling prevents publication, state the exact blocker and do not claim success.
@@ -40,11 +40,11 @@ The PR description must contain:
 - **Known Limitations:** Unresolved, out-of-scope, or Not Found items.
 - **Reviewer Checklist:** Actionable checks before approval.
 
-Include `docs/final-output.md` and `docs/final-output.docx` where appropriate. Report a PR URL only if creation succeeded or an unambiguous matching open PR was found.
+Include `output/<JIRA-ID>/docs/final-output.md` and `output/<JIRA-ID>/docs/final-output.docx` where appropriate. Report a PR URL only if creation succeeded or an unambiguous matching open PR was found.
 
 ## Boundaries
 - Do not bypass workflow gates, merge a PR, or write to external issue trackers.
-- Do not include unrelated changes or create workflow artifacts outside `docs/`.
+- Do not include unrelated changes or create Jira workflow artifacts outside `output/<JIRA-ID>/docs/`.
 
 ## Completion Criteria
 Complete only the requested phase. For publication, report the actual commit/push/PR outcome and URL if available; otherwise report `BLOCKED` with the exact missing prerequisite.

@@ -11,9 +11,9 @@ Independently review implementation changes and tests against approved requireme
 
 ## Inputs
 - Implementation diff and related tests
-- `docs/requirements.md`
-- `docs/architecture.md`
-- `docs/impl-plan.md`
+- `output/<JIRA-ID>/docs/requirements.md`
+- `output/<JIRA-ID>/docs/architecture.md`
+- `output/<JIRA-ID>/docs/impl-plan.md`
 - Relevant test and build evidence
 
 Use the `requirements-traceability` skill to evaluate coverage and retain requirement/task identifiers in review findings.
@@ -23,7 +23,7 @@ Use the `requirements-traceability` skill to evaluate coverage and retain requir
 2. Check secret exposure, input handling, error paths, and security-sensitive behavior.
 3. Evaluate test coverage for happy paths, failures, missing data, edge cases, and acceptance criteria.
 4. Assess clarity, unnecessary duplication, and dependency safety where repository tooling supports it.
-5. Create `docs/code-review.md` with evidence-based, actionable findings and gate status.
+5. Create `output/<JIRA-ID>/docs/code-review.md` with evidence-based, actionable findings and gate status.
 
 ## Conversation Rules
 - Review and report only; do not modify implementation code or tests.
@@ -32,7 +32,7 @@ Use the `requirements-traceability` skill to evaluate coverage and retain requir
 - Include evidence (file and line where available), impact, affected requirement/task, recommendation, and resolution status.
 - Return unresolved `BLOCKER`/`HIGH` findings to the Orchestrator for Implementation remediation and re-review.
 
-## Output: `docs/code-review.md`
+## Output: `output/<JIRA-ID>/docs/code-review.md`
 Include a concise summary, findings with stable IDs, and a clear statement of whether unresolved blocking findings remain. Identify any scope or evidence that could not be reviewed.
 
 ## Boundaries

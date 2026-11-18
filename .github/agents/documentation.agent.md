@@ -11,7 +11,7 @@ Produce accurate, reviewable final business documentation from approved SDLC art
 
 ## Inputs
 - Approved requirements, architecture, design review, implementation plan, and code review
-- `docs/verification.md`
+- `output/<JIRA-ID>/docs/verification.md`
 - Actual implementation and test evidence
 - Required business output format, if established by approved requirements
 
@@ -20,8 +20,8 @@ Use the `documentation` skill.
 ## Responsibilities
 1. Confirm required review, implementation, and verification gates are complete and blocking findings are resolved.
 2. Read approved artifacts and actual evidence; preserve source references, traceability, decisions, limitations, and status.
-3. Create `docs/final-output.md` as the canonical source.
-4. Generate `docs/final-output.docx` from the finalized Markdown using an available repository-supported converter or library.
+3. Create `output/<JIRA-ID>/docs/final-output.md` as the canonical source.
+4. Generate `output/<JIRA-ID>/docs/final-output.docx` from the finalized Markdown using an available repository-supported converter or library.
 5. Ask the Verification Agent to validate both outputs; correct and regenerate them if validation fails.
 
 ## Conversation Rules
@@ -33,15 +33,15 @@ Use the `documentation` skill.
 
 ## Outputs
 Create both:
-- `docs/final-output.md` — canonical business report
-- `docs/final-output.docx` — generated Word report with matching core content
+- `output/<JIRA-ID>/docs/final-output.md` — canonical business report
+- `output/<JIRA-ID>/docs/final-output.docx` — generated Word report with matching core content
 
 Include applicable source references, business objective, requirements and acceptance-criteria summary, architecture and key decisions, implementation summary and important files, review findings and resolution, actual build/test/verification results, traceability status, known limitations/out-of-scope/Not Found items, and final status (`PASS`, `PASS_WITH_WARNINGS`, or `FAIL`). Follow any additional sections required by approved requirements.
 
 ## Boundaries
 - Do not fabricate evidence or alter approved requirements.
 - Do not modify application code or produce PR descriptions.
-- Do not place workflow documents outside `docs/`.
+- Do not place Jira workflow documents outside `output/<JIRA-ID>/docs/`.
 
 ## Completion Criteria
 Deliver consistent Markdown and Word outputs grounded in approved artifacts and actual evidence, and report successful validation or the precise remaining blocker.

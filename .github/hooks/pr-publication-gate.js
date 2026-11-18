@@ -1,7 +1,8 @@
-// PreToolUse PR gate: blocks pushes and PR publication unless docs contains
-// passing verification, final-output, and workflow-state attestations.
+// PreToolUse PR gate: blocks pushes and PR publication unless the Jira-scoped
+// output directory contains passing verification and final-output attestations.
 const fs = require("node:fs");
 const path = require("node:path");
+const { execFileSync } = require("node:child_process");
 
 function deny(reason) {
   process.stdout.write(
@@ -55,6 +56,41 @@ function readRequired(root, relativePath) {
   return fs.readFileSync(file, "utf8");
 }
 
+function canonicalIssueId(value) {
+  const candidate = String(value || "").trim();
+  if (/^\d+$/.test(candidate)) return candidate;
+  if (/^[A-Za-z][A-Za-z0-9_]*-\d+$/.test(candidate)) return candidate.toUpperCase();
+  return null;
+}
+
+function getIssueId(event, root, commandText) {
+  const toolInput = event.toolInput || event.tool_input || {};
+  const suppliedHead = typeof toolInput.head === "string" ? toolInput.head : "";
+  if (suppliedHead) {
+    const branchName = suppliedHead.includes(":")
+      ? suppliedHead.slice(suppliedHead.lastIndexOf(":") + 1)
+      : suppliedHead;
+    const headMatch = branchName.match(/^sdlc\/([a-z][a-z0-9_]*-\d+|\d+)$/i);
+    return headMatch ? canonicalIssueId(headMatch[1]) : null;
+  }
+
+  const branchMatch = commandText.match(/\bsdlc\/([a-z][a-z0-9_]*-\d+|\d+)\b/i);
+  const fromCommand = branchMatch ? canonicalIssueId(branchMatch[1]) : null;
+  if (fromCommand) return fromCommand;
+
+  try {
+    const branch = execFileSync("git", ["branch", "--show-current"], {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    const match = branch.match(/^sdlc\/([a-z][a-z0-9_]*-\d+|\d+)$/i);
+    return match ? canonicalIssueId(match[1]) : null;
+  } catch {
+    return null;
+  }
+}
+
 try {
   const event = JSON.parse(fs.readFileSync(0, "utf8"));
   const toolName = String(event.toolName || event.tool_name || "").toLowerCase();
@@ -69,25 +105,30 @@ try {
   const root = findWorkspaceRoot(event);
   if (!root) throw new Error("Cannot locate this workspace to validate PR publication evidence.");
 
-  const state = readRequired(root, "docs/sdlc-state.md");
-  const verification = readRequired(root, "docs/verification.md");
-  readRequired(root, "docs/final-output.md");
-  readRequired(root, "docs/final-output.docx");
+  const issueId = getIssueId(event, root, commandText);
+  if (!issueId) {
+    throw new Error("Cannot determine a valid Jira ID from the PR head or current sdlc/<JIRA-ID> branch.");
+  }
+  const docsPath = path.join("output", issueId, "docs");
+  const state = readRequired(root, path.join(docsPath, "sdlc-state.md"));
+  const verification = readRequired(root, path.join(docsPath, "verification.md"));
+  readRequired(root, path.join(docsPath, "final-output.md"));
+  readRequired(root, path.join(docsPath, "final-output.docx"));
 
   if (!/^\s*PR publication gate:\s*PASS\s*$/im.test(state)) {
-    throw new Error("docs/sdlc-state.md must contain `PR publication gate: PASS`.");
+    throw new Error(`${docsPath}/sdlc-state.md must contain \`PR publication gate: PASS\`.`);
   }
   if (!/^\s*Unresolved blockers:\s*none\s*$/im.test(state)) {
-    throw new Error("docs/sdlc-state.md must contain `Unresolved blockers: none`.");
+    throw new Error(`${docsPath}/sdlc-state.md must contain \`Unresolved blockers: none\`.`);
   }
   if (!/^\s*Final-output validation:\s*PASS\s*$/im.test(state)) {
-    throw new Error("docs/sdlc-state.md must contain `Final-output validation: PASS`.");
+    throw new Error(`${docsPath}/sdlc-state.md must contain \`Final-output validation: PASS\`.`);
   }
 
   const status = verification.match(/^\s*Final status:\s*(PASS|PASS_WITH_WARNINGS|FAIL)\s*$/im);
   if (!status || status[1].toUpperCase() === "FAIL") {
     throw new Error(
-      "docs/verification.md must report `Final status: PASS` or `PASS_WITH_WARNINGS`.",
+      `${docsPath}/verification.md must report \`Final status: PASS\` or \`PASS_WITH_WARNINGS\`.`,
     );
   }
   if (
@@ -95,11 +136,11 @@ try {
     !/^\s*Warning acceptance:\s*approved by user\s*$/im.test(state)
   ) {
     throw new Error(
-      "PASS_WITH_WARNINGS requires `Warning acceptance: approved by user` in docs/sdlc-state.md.",
+      `PASS_WITH_WARNINGS requires \`Warning acceptance: approved by user\` in ${docsPath}/sdlc-state.md.`,
     );
   }
   if (!/^\s*Final-output validation:\s*PASS\s*$/im.test(verification)) {
-    throw new Error("docs/verification.md must contain `Final-output validation: PASS`.");
+    throw new Error(`${docsPath}/verification.md must contain \`Final-output validation: PASS\`.`);
   }
 } catch (error) {
   deny(`PR publication gate blocked: ${error.message}`);

@@ -2,7 +2,7 @@
 
 This repository contains GitHub Copilot agents, prompt commands, skills, workspace hooks, and MCP configuration for a human-gated software delivery lifecycle. It is framework configuration, not an application implementation: business-specific workflow artifacts are created only when you start a workflow with a User Story.
 
-See the [framework guide](docs/agentic-sdlc-framework.md) for workflow, authentication, delegation, and hook details.
+See [FRAMEWORK.md](FRAMEWORK.md) for workflow, authentication, delegation, and hook details.
 
 ## Requirements
 
@@ -20,13 +20,13 @@ See the [framework guide](docs/agentic-sdlc-framework.md) for workflow, authenti
    | Command | Purpose |
    | --- | --- |
    | `/run-agentic-sdlc` | Start the complete gated workflow for one User Story. |
-   | `/draft-requirements` | Clarify one story and create `docs/requirements.md`. |
+   | `/draft-requirements` | Clarify one story and create `output/<JIRA-ID>/docs/requirements.md`. |
    | `/sdlc-mcp-preflight` | Check Atlassian and GitHub connectivity without reading an issue or starting a workflow. |
 
-4. Provide a Jira issue key/ID, Confluence reference, Word document, or pasted story as requested. The complete branch/commit/push/PR workflow requires an associated Jira issue key/ID.
+4. Provide a Jira issue key/ID and the story source (Jira, linked Confluence, Word, or pasted text). The Jira ID is required to establish a safe output directory and to run the branch/commit/push/PR workflow.
 5. Answer blocking clarification questions. The workflow must pause rather than invent requirements or bypass unresolved review findings.
 
-Prompt files are in [`.github/prompts/`](.github/prompts/). Use the Orchestrator for the full lifecycle; individual custom agents in [`.github/agents/`](.github/agents/) support phase-specific work.
+Slash commands are in [`.github/commands/`](.github/commands/). Use the Orchestrator for the full lifecycle; individual custom agents in [`.github/agents/`](.github/agents/) support phase-specific work.
 
 ## Workflow and outputs
 
@@ -40,12 +40,14 @@ The Orchestrator coordinates these phases:
 6. Final documentation and validation
 7. Pull-request publication, only after all required gates pass
 
-Workflow artifacts are stored under `docs/`, including:
+Each Jira run receives a separate output directory: `output/<JIRA-ID>/docs/`. For example, SCRUM-5 artifacts are under `output/SCRUM-5/docs/`. Contents include:
 
 - `requirements.md`, `architecture.md`, `design-review.md`
 - `impl-plan.md`, `code-review.md`, `verification.md`
 - `final-output.md` and generated `final-output.docx`
 - `sdlc-state.md` during an Orchestrator run
+
+The Jira ID is validated and canonicalized (Jira keys use uppercase). A new issue gets a new directory. Existing issue output is never written into another issue's folder; when a same-ID directory already exists, confirm its issue identity and resume or ask before replacing artifacts. Generic project documentation remains outside `output/`.
 
 The agents preserve stable requirement, acceptance-criteria, and implementation-task IDs through the implementation and verification evidence. They must report unavailable checks and blockers explicitly.
 
@@ -65,7 +67,7 @@ Skill definitions are under [`.github/skills/`](.github/skills/); agents invoke 
 The hook configuration is [`.github/hooks/sdlc-guards.json`](.github/hooks/sdlc-guards.json):
 
 - `agent-safety-guard.js` blocks recognized Atlassian write tools, GitHub merge operations, and selected destructive shell/Git commands.
-- `pr-publication-gate.js` requires passing verification and final-output attestations in `docs/` before allowing recognized push or PR-publication operations.
+- `pr-publication-gate.js` requires passing verification and final-output attestations in the current Jira branch's `output/<JIRA-ID>/docs/` before allowing recognized push or PR-publication operations.
 
 The PR gate expects exact status lines documented in the Orchestrator, Verification Agent, and PR Agent instructions. `PASS_WITH_WARNINGS` requires user acceptance to be recorded in workflow state. Hooks are defense in depth, not an authorization boundary: alternate tools or clients may bypass them, and MCP tool naming varies. Do not rely on hooks instead of least-privilege permissions and careful review.
 
@@ -82,7 +84,7 @@ The PR gate expects exact status lines documented in the Orchestrator, Verificat
 
 - Workspace Copilot instructions: [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
 - Custom agents: [`.github/agents/`](.github/agents/)
-- Prompt commands: [`.github/prompts/`](.github/prompts/)
+- Slash commands: [`.github/commands/`](.github/commands/)
 - Skills: [`.github/skills/`](.github/skills/)
 - Hooks: [`.github/hooks/`](.github/hooks/)
 - MCP servers: [`.vscode/mcp.json`](.vscode/mcp.json)
@@ -95,4 +97,4 @@ node --check .github/hooks/pr-publication-gate.js
 Get-Content -Raw .github/hooks/sdlc-guards.json | ConvertFrom-Json
 ```
 
-For setup and runtime caveats, see [docs/agentic-sdlc-framework.md](docs/agentic-sdlc-framework.md).
+For setup and runtime caveats, see [FRAMEWORK.md](FRAMEWORK.md).
