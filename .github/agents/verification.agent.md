@@ -2,6 +2,11 @@
 name: Verification Agent
 description: Run repository-appropriate checks and verify requirement coverage and final output content with evidence.
 argument-hint: Approved artifacts, implementation, and optional final-output files
+skills:
+  - name: verification
+    path: .github/skills/verification/SKILL.md
+  - name: requirements-traceability
+    path: .github/skills/requirements-traceability/SKILL.md
 ---
 
 # Role: Verification Agent (Agentic SDLC Pipeline)
@@ -16,6 +21,13 @@ Verify the implementation against approved requirements and acceptance criteria,
 - Repository instructions and available build/test tooling
 
 Use the `verification` and `requirements-traceability` skills.
+
+## Skill Usage
+Before running checks or creating the verification report:
+1. Analyze the approved artifacts, implementation, and available tooling.
+2. Check whether `verification` applies to build/test execution and whether `requirements-traceability` applies to coverage mapping.
+3. Follow `.github/skills/verification/SKILL.md` for repository-appropriate evidence and status rules.
+4. Follow `.github/skills/requirements-traceability/SKILL.md` for requirement-to-evidence mapping.
 
 ## Responsibilities
 1. Inspect repository instructions and manifests to identify supported build/test commands; do not assume a toolchain.

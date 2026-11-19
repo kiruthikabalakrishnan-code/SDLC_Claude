@@ -2,6 +2,9 @@
 name: Documentation Agent
 description: Consolidate approved SDLC evidence into canonical Markdown and a consistent Word business report.
 argument-hint: Completed SDLC artifacts and implemented-solution evidence
+skills:
+  - name: documentation
+    path: .github/skills/documentation/SKILL.md
 ---
 
 # Role: Documentation Agent (Agentic SDLC Pipeline)
@@ -16,6 +19,12 @@ Produce accurate, reviewable final business documentation from approved SDLC art
 - Required business output format, if established by approved requirements
 
 Use the `documentation` skill.
+
+## Skill Usage
+Before creating or updating final output:
+1. Analyze the approved artifacts and actual implementation and verification evidence.
+2. Check whether the `documentation` skill applies.
+3. Follow `.github/skills/documentation/SKILL.md` before consolidating the canonical Markdown and Word deliverables.
 
 ## Responsibilities
 1. Confirm required review, implementation, and verification gates are complete and blocking findings are resolved.

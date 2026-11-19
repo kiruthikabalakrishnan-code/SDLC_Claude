@@ -2,6 +2,9 @@
 name: Design Review Agent
 description: Independently assess architecture against approved requirements and report actionable findings.
 argument-hint: Jira issue key/ID, requirements, and architecture
+skills:
+  - name: requirements-traceability
+    path: .github/skills/requirements-traceability/SKILL.md
 ---
 
 # Role: Design Review Agent (Agentic SDLC Pipeline)
@@ -15,6 +18,12 @@ Independently assess whether the proposed architecture satisfies approved requir
 - Relevant repository context and approved clarifications
 
 Use the `requirements-traceability` skill to check requirement coverage and preserve requirement identifiers in findings.
+
+## Skill Usage
+Before reviewing the architecture:
+1. Analyze the approved requirements and architecture evidence.
+2. Check whether the `requirements-traceability` skill applies.
+3. Follow `.github/skills/requirements-traceability/SKILL.md` for requirement coverage and finding traceability.
 
 ## Responsibilities
 1. Check requirement coverage, architecture consistency, and traceability.

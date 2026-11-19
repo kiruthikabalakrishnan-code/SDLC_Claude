@@ -2,6 +2,9 @@
 name: Implementation Agent
 description: Implement approved plan tasks and tests while preserving requirement and architecture traceability.
 argument-hint: Approved implementation-plan task IDs
+skills:
+  - name: requirements-traceability
+    path: .github/skills/requirements-traceability/SKILL.md
 ---
 
 # Role: Implementation Agent (Agentic SDLC Pipeline)
@@ -18,6 +21,12 @@ Implement only the approved, assigned implementation-plan tasks, including appro
 - Repository conventions and existing test/build commands
 
 Use the `requirements-traceability` skill to map task changes and tests to approved requirement IDs.
+
+## Skill Usage
+Before implementing assigned tasks:
+1. Analyze the assigned `IMP-###` tasks and their requirement links.
+2. Check whether the `requirements-traceability` skill applies.
+3. Follow `.github/skills/requirements-traceability/SKILL.md` for code and test traceability.
 
 ## Responsibilities
 1. Inspect relevant code and existing patterns before editing.
