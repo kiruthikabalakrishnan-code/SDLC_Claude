@@ -67,4 +67,3 @@ There is no lint script. Follow existing code conventions; do not assume tooling
 ## Layout
 
 - `.claude/agents/` subagents, `.claude/skills/` skills (including `run-agentic-sdlc`), `.claude/commands/` slash commands, `.claude/hooks/` hook scripts, `.claude/settings.json` hooks and permissions, `.mcp.json` MCP servers (`jira`, `github`).
-- `.github/` holds the original Copilot setup, kept for now; this file is the source of truth.

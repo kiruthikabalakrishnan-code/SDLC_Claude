@@ -10,22 +10,13 @@
         "JIRA_API_TOKEN": "${JIRA_API_TOKEN}"
       }
     },
-    // "github": {
-    //   "type": "http",
-    //   "url": "https://api.githubcopilot.com/mcp/"
-    //   // "headers": {
-    //   //   "Authorization": "Bearer ${GITHUB_PAT}"
-    //   // }
-
-    //   }
-       "github": {
+    "github": {
       "type": "stdio",
       "command": "github-mcp-server",
       "args": ["stdio"],
       "env": {
-        "GITHUB_PAT": "${GITHUB_PAT}"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PAT}"
       }
     }
-    }
   }
-
+}

@@ -2,8 +2,6 @@
 
 This repository contains reusable Claude Code subagents, slash commands, skills, project instructions (`CLAUDE.md`), hooks, and MCP server definitions. It is framework configuration: do not run a Jira workflow or create business-specific output until a User Story and its associated Jira issue key/ID are supplied.
 
-The original GitHub Copilot setup remains under `.github/` and `.vscode/` and is no longer the source of truth; `CLAUDE.md` is. Remove the Copilot files once the Claude setup is validated.
-
 ## Entry point and outputs
 
 Use these slash commands in Claude Code:
@@ -22,8 +20,8 @@ The per-issue directory contains requirements, architecture, reviews, implementa
 
 `.mcp.json` defines two project-scoped servers; Claude Code asks you to approve them on first use. No token or password is stored in this repository; set these environment variables instead:
 
-- `jira` — `mcp-atlassian` via `uvx` (requires `uv`): `JIRA_USERNAME`, `JIRA_API_TOKEN`. The Jira URL is in the file. The Copilot setup also carried a commented-out remote Atlassian server (`https://mcp.atlassian.com/v2/mcp`); it was not migrated.
-- `github` — `https://api.githubcopilot.com/mcp/` with `Authorization: Bearer ${GITHUB_PAT}`. Use a token scoped to this repository's pull-request needs.
+- `jira` — `mcp-atlassian` via `uvx` (requires `uv`): `JIRA_USERNAME`, `JIRA_API_TOKEN`. The Jira URL is in the file.
+- `github` — `github-mcp-server stdio` (the binary must be on `PATH`), reading `GITHUB_PAT`. Use a token scoped to this repository's pull-request needs.
 
 Atlassian exposes capabilities beyond reads. The workflow instructs agents not to write to Jira or Confluence; a hook denies recognized Atlassian write tools, but hooks are not an authorization boundary. Use least-privilege Atlassian permissions. A Jira ID authorizes the scoped branch, commit, push, and PR only after workflow gates pass; do not merge (`settings.json` also denies the GitHub merge tool and `gh pr merge`).
 
