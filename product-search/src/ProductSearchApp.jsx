@@ -67,7 +67,7 @@ export default function ProductSearchApp() {
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Try “wireless”"
+            placeholder="Search products by name..."
           />
         </div>
         <div className="filter-field">

@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+const SEARCH_PLACEHOLDER = "Search products by name...";
+
 test("renders local products with required details and USD prices", async ({ page }) => {
   await page.goto("/");
   const cards = page.getByRole("article");
@@ -96,6 +98,40 @@ test("uses the same local placeholder when a product image fails", async ({ page
     element.src = "/missing-image.svg";
   });
   await expect(image).toHaveAttribute("src", "/placeholder.svg");
+});
+
+test("shows the search placeholder on an empty search box", async ({ page }) => {
+  await page.goto("/");
+  const search = page.getByRole("searchbox", { name: "Search by name" });
+
+  await expect(search).toHaveValue("");
+  await expect(search).toHaveAttribute("placeholder", SEARCH_PLACEHOLDER);
+  await expect(search).toHaveAccessibleName("Search by name");
+  // Native placeholder state: placeholder present and value empty.
+  await expect.poll(() => search.evaluate((element) => element.matches(":placeholder-shown"))).toBe(true);
+});
+
+test("hides the native placeholder while text is entered and restores it when cleared", async ({ page }) => {
+  await page.goto("/");
+  const search = page.getByRole("searchbox", { name: "Search by name" });
+  const cards = page.getByRole("article");
+  const placeholderShown = () => search.evaluate((element) => element.matches(":placeholder-shown"));
+
+  await search.fill("wireless");
+  await expect.poll(placeholderShown).toBe(false);
+  await expect(cards).toHaveCount(2);
+
+  await search.fill("");
+  await expect.poll(placeholderShown).toBe(true);
+  await expect(search).toHaveAttribute("placeholder", SEARCH_PLACEHOLDER);
+  await expect(cards).toHaveCount(12);
+
+  await search.fill("wireless");
+  await expect.poll(placeholderShown).toBe(false);
+  await page.getByRole("button", { name: "Clear Filters" }).click();
+  await expect(search).toHaveValue("");
+  await expect.poll(placeholderShown).toBe(true);
+  await expect(cards).toHaveCount(12);
 });
 
 for (const viewport of [{ width: 375, height: 667 }, { width: 1366, height: 768 }]) {
