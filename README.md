@@ -4,6 +4,10 @@ This repository contains GitHub Copilot agents, prompt commands, skills, workspa
 
 See [FRAMEWORK.md](FRAMEWORK.md) for workflow, authentication, delegation, and hook details.
 
+## Claude Code
+
+The same framework is available for Claude Code: project instructions in [`CLAUDE.md`](CLAUDE.md) (source of truth), subagents/skills/commands/hooks under [`.claude/`](.claude/), and MCP servers in [`.mcp.json`](.mcp.json). Use `/run-agentic-sdlc <JIRA-ID>`, `/draft-requirements`, or `/sdlc-mcp-preflight`. The Copilot sections below describe the original setup.
+
 ## Requirements
 
 - Visual Studio Code with GitHub Copilot Chat enabled.
@@ -40,7 +44,7 @@ The Orchestrator coordinates these phases:
 6. Final documentation and validation
 7. Pull-request publication, only after all required gates pass
 
-Each Jira run receives a separate output directory: `output/<JIRA-ID>/docs/`. For example, SCRUM-5 artifacts are under `output/SCRUM-5/docs/`. Contents include:
+Each Jira run receives a separate output directory: `output/<JIRA-ID>/docs/`. The folder is created when a workflow runs; for example, a run for SCRUM-5 writes to `output/SCRUM-5/docs/`. Contents include:
 
 - `requirements.md`, `architecture.md`, `design-review.md`
 - `impl-plan.md`, `code-review.md`, `verification.md`

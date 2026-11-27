@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "jira": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["--python", "3.12", "mcp-atlassian"],
+      "env": {
+        "JIRA_URL": "https://epam-team-d41wx5ya.atlassian.net",
+        "JIRA_USERNAME": "${JIRA_USERNAME}",
+        "JIRA_API_TOKEN": "${JIRA_API_TOKEN}"
+      }
+    },
+    // "github": {
+    //   "type": "http",
+    //   "url": "https://api.githubcopilot.com/mcp/"
+    //   // "headers": {
+    //   //   "Authorization": "Bearer ${GITHUB_PAT}"
+    //   // }
+
+    //   }
+       "github": {
+      "type": "stdio",
+      "command": "github-mcp-server",
+      "args": ["stdio"],
+      "env": {
+        "GITHUB_PAT": "${GITHUB_PAT}"
+      }
+    }
+    }
+  }
+
